@@ -1,0 +1,30 @@
+{
+    "name": "cyberclick-tech/otel-bundle",
+    "description": "OpenTelemetry Symfony bundle with tracing, logging correlation, Doctrine instrumentation and Messenger middleware",
+    "version": "0.0.1",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "CyberclickTech\\OtelBundle\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.2",
+        "symfony/framework-bundle": "^6.4|^7.0",
+        "symfony/event-dispatcher": "^6.4|^7.0",
+        "symfony/http-kernel": "^6.4|^7.0",
+        "symfony/console": "^6.4|^7.0",
+        "symfony/messenger": "^6.4|^7.0",
+        "symfony/routing": "^6.4|^7.0",
+        "open-telemetry/api": "^1.0",
+        "open-telemetry/sdk": "^1.0",
+        "open-telemetry/exporter-otlp": "^1.0",
+        "open-telemetry/sem-conv": "^1.0",
+        "doctrine/dbal": "^3.6|^4.0",
+        "monolog/monolog": "^3.0"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
