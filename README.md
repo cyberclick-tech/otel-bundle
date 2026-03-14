@@ -1,6 +1,6 @@
 # cyberclick-tech/otel-bundle
 
-Symfony bundle for OpenTelemetry instrumentation. Provides automatic tracing for HTTP requests, console commands, Doctrine queries, and Symfony Messenger messages, plus log-trace correlation via Monolog.
+Symfony bundle for OpenTelemetry instrumentation. Provides automatic tracing for HTTP requests, outgoing HTTP calls, console commands, Doctrine queries, and Symfony Messenger messages, plus log-trace correlation via Monolog.
 
 ## Installation
 
@@ -31,7 +31,8 @@ OTEL_DB_INSTANCE=mydb  # Database name shown in spans (defaults to empty)
 
 ## What it does out of the box
 
-- **HTTP tracing**: Creates spans for every HTTP request with `http.method`, `http.route`, `http.host`, `http.status_code`
+- **HTTP tracing**: Creates spans for every incoming HTTP request with `http.method`, `http.route`, `http.host`, `http.status_code`
+- **HTTP client tracing**: Automatically traces outgoing HTTP calls (Symfony HttpClient) with `http.method`, `http.url`, `http.host`, `http.status_code`
 - **Console tracing**: Creates spans for console commands with exit codes
 - **Doctrine tracing**: Creates spans for every SQL query with `db.system`, `db.name`, `db.statement`, `db.operation`
 - **Messenger tracing**: Creates spans for Symfony Messenger message handling
@@ -99,6 +100,7 @@ To enable SQL tracing, add the Doctrine middleware to your DBAL connection confi
 | `cyberclick_otel.messenger.tracing_middleware` | Messenger middleware |
 | `CyberclickTech\OtelBundle\Tracing\MessageTracerInterface` | Message tracer for consumers |
 | `CyberclickTech\OtelBundle\Doctrine\TracingMiddleware` | Doctrine DBAL middleware |
+| `CyberclickTech\OtelBundle\HttpClient\TracingHttpClient` | HTTP client decorator (auto-registered) |
 
 ## Requirements
 
