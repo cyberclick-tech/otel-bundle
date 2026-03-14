@@ -23,23 +23,46 @@ final class TracingHttpClient implements HttpClientInterface
         $parsedUrl = parse_url($url);
         $host = $parsedUrl['host'] ?? 'unknown';
         $path = $parsedUrl['path'] ?? '/';
-        $spanName = sprintf('HTTP %s %s%s', $method, $host, $path);
 
-        $span = $this->tracer->spanBuilder($spanName)
+        $span = $this->tracer->spanBuilder(sprintf('HTTP %s %s%s', $method, $host, $path))
             ->setSpanKind(SpanKind::KIND_CLIENT)
             ->setAttribute('http.method', $method)
             ->setAttribute('http.url', $url)
             ->setAttribute('http.host', $host)
             ->startSpan();
 
-        try {
-            $response = $this->client->request($method, $url, $options);
+        $originalOnProgress = $options['on_progress'] ?? null;
+        $spanClosed = false;
 
-            return new TracingResponse($response, $span);
+        $options['on_progress'] = function (int $dlNow, int $dlSize, array $info) use ($span, $originalOnProgress, &$spanClosed) {
+            if (!$spanClosed && ($info['http_code'] ?? 0) > 0) {
+                $statusCode = $info['http_code'];
+                $span->setAttribute('http.status_code', $statusCode);
+                $span->setAttribute('http.response.status_code', $statusCode);
+
+                if ($statusCode >= 400) {
+                    $span->setStatus(StatusCode::STATUS_ERROR, sprintf('HTTP %d', $statusCode));
+                } else {
+                    $span->setStatus(StatusCode::STATUS_OK);
+                }
+
+                $span->end();
+                $spanClosed = true;
+            }
+
+            if ($originalOnProgress !== null) {
+                $originalOnProgress($dlNow, $dlSize, $info);
+            }
+        };
+
+        try {
+            return $this->client->request($method, $url, $options);
         } catch (\Throwable $e) {
-            $span->recordException($e);
-            $span->setStatus(StatusCode::STATUS_ERROR, $e->getMessage());
-            $span->end();
+            if (!$spanClosed) {
+                $span->recordException($e);
+                $span->setStatus(StatusCode::STATUS_ERROR, $e->getMessage());
+                $span->end();
+            }
 
             throw $e;
         }
@@ -47,10 +70,6 @@ final class TracingHttpClient implements HttpClientInterface
 
     public function stream(ResponseInterface|iterable $responses, ?float $timeout = null): ResponseStreamInterface
     {
-        if ($responses instanceof TracingResponse) {
-            $responses = $responses->getInnerResponse();
-        }
-
         return $this->client->stream($responses, $timeout);
     }
 
