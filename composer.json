@@ -1,7 +1,6 @@
 {
     "name": "cyberclick-tech/otel-bundle",
     "description": "OpenTelemetry Symfony bundle with tracing, logging correlation, Doctrine instrumentation and Messenger middleware",
-    "version": "0.0.2",
     "type": "symfony-bundle",
     "license": "MIT",
     "autoload": {
