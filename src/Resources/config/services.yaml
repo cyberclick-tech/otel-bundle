@@ -8,7 +8,7 @@ services:
   # ===========================================
 
   cyberclick_otel.tracer_provider:
-    factory: '@CyberclickTech\OtelBundle\Tracing\TracerFactory'
+    factory: '@Cyberclick\OtelBundle\Tracing\TracerFactory'
     class: 'OpenTelemetry\SDK\Trace\TracerProvider'
     arguments:
       - '%env(OTEL_SERVICE_NAME)%'
@@ -21,38 +21,38 @@ services:
     arguments:
       - '%env(OTEL_SERVICE_NAME)%'
 
-  CyberclickTech\OtelBundle\Tracing\TracerFactory: ~
+  Cyberclick\OtelBundle\Tracing\TracerFactory: ~
 
   # ===========================================
   # SPAN ATTRIBUTE EXTRACTOR (default: noop)
   # ===========================================
 
-  CyberclickTech\OtelBundle\NullSpanAttributeExtractor: ~
+  Cyberclick\OtelBundle\NullSpanAttributeExtractor: ~
 
-  CyberclickTech\OtelBundle\SpanAttributeExtractorInterface:
-    alias: CyberclickTech\OtelBundle\NullSpanAttributeExtractor
+  Cyberclick\OtelBundle\SpanAttributeExtractorInterface:
+    alias: Cyberclick\OtelBundle\NullSpanAttributeExtractor
 
   # ===========================================
   # MESSAGE TRACER
   # ===========================================
 
-  CyberclickTech\OtelBundle\Tracing\MessageTracer:
+  Cyberclick\OtelBundle\Tracing\MessageTracer:
     arguments:
       $tracer: '@cyberclick_otel.tracer'
       $tracerProvider: '@cyberclick_otel.tracer_provider'
 
-  CyberclickTech\OtelBundle\Tracing\MessageTracerInterface:
-    alias: CyberclickTech\OtelBundle\Tracing\MessageTracer
+  Cyberclick\OtelBundle\Tracing\MessageTracerInterface:
+    alias: Cyberclick\OtelBundle\Tracing\MessageTracer
 
   # ===========================================
   # EVENT SUBSCRIBERS
   # ===========================================
 
-  CyberclickTech\OtelBundle\EventSubscriber\HttpKernelEventSubscriber:
+  Cyberclick\OtelBundle\EventSubscriber\HttpKernelEventSubscriber:
     arguments:
       $tracer: '@cyberclick_otel.tracer'
 
-  CyberclickTech\OtelBundle\EventSubscriber\ConsoleEventSubscriber:
+  Cyberclick\OtelBundle\EventSubscriber\ConsoleEventSubscriber:
     arguments:
       $tracer: '@cyberclick_otel.tracer'
 
@@ -60,22 +60,22 @@ services:
   # MESSENGER
   # ===========================================
 
-  CyberclickTech\OtelBundle\Messenger\ClassNameExtractor: ~
+  Cyberclick\OtelBundle\Messenger\ClassNameExtractor: ~
 
-  CyberclickTech\OtelBundle\Messenger\NameExtractorInterface:
-    alias: CyberclickTech\OtelBundle\Messenger\ClassNameExtractor
+  Cyberclick\OtelBundle\Messenger\NameExtractorInterface:
+    alias: Cyberclick\OtelBundle\Messenger\ClassNameExtractor
 
   cyberclick_otel.messenger.tracing_middleware:
-    class: CyberclickTech\OtelBundle\Messenger\TracingMiddleware
+    class: Cyberclick\OtelBundle\Messenger\TracingMiddleware
     arguments:
       $tracer: '@cyberclick_otel.tracer'
-      $nameExtractor: '@CyberclickTech\OtelBundle\Messenger\NameExtractorInterface'
+      $nameExtractor: '@Cyberclick\OtelBundle\Messenger\NameExtractorInterface'
 
   # ===========================================
   # MONOLOG PROCESSOR (log ↔ trace correlation)
   # ===========================================
 
-  CyberclickTech\OtelBundle\Logging\OtelMonologProcessor:
+  Cyberclick\OtelBundle\Logging\OtelMonologProcessor:
     tags:
       - { name: monolog.processor }
 
@@ -83,7 +83,7 @@ services:
   # DOCTRINE TRACING MIDDLEWARE
   # ===========================================
 
-  CyberclickTech\OtelBundle\Doctrine\TracingMiddleware:
+  Cyberclick\OtelBundle\Doctrine\TracingMiddleware:
     arguments:
       $tracer: '@cyberclick_otel.tracer'
       $instance: '%env(default::OTEL_DB_INSTANCE)%'

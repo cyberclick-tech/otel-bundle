@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CyberclickTech\OtelBundle\EventSubscriber;
+namespace Cyberclick\OtelBundle\EventSubscriber;
 
 use OpenTelemetry\API\Trace\SpanInterface;
 use OpenTelemetry\API\Trace\SpanKind;

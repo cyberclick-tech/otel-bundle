@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CyberclickTech\OtelBundle;
+namespace Cyberclick\OtelBundle;
 
 use Symfony\Component\HttpFoundation\Request;
 

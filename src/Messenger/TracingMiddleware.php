@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CyberclickTech\OtelBundle\Messenger;
+namespace Cyberclick\OtelBundle\Messenger;
 
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;

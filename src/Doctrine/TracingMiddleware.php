@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CyberclickTech\OtelBundle\Doctrine;
+namespace Cyberclick\OtelBundle\Doctrine;
 
 use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\Driver\Middleware;

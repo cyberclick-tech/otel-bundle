@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CyberclickTech\OtelBundle\Logging;
+namespace Cyberclick\OtelBundle\Logging;
 
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;

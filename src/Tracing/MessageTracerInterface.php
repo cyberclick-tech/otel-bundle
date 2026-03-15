@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CyberclickTech\OtelBundle\Tracing;
+namespace Cyberclick\OtelBundle\Tracing;
 
 use Throwable;
 

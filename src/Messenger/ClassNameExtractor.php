@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CyberclickTech\OtelBundle\Messenger;
+namespace Cyberclick\OtelBundle\Messenger;
 
 final class ClassNameExtractor implements NameExtractorInterface
 {

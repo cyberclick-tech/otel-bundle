@@ -1,17 +1,17 @@
-# cyberclick-tech/otel-bundle
+# cyberclick/otel-bundle
 
 Symfony bundle for OpenTelemetry instrumentation. Provides automatic tracing for HTTP requests, outgoing HTTP calls, console commands, Doctrine queries, and Symfony Messenger messages, plus log-trace correlation via Monolog.
 
 ## Installation
 
 ```bash
-composer require cyberclick-tech/otel-bundle
+composer require cyberclick/otel-bundle
 ```
 
 Register the bundle in `config/bundles.php`:
 
 ```php
-CyberclickTech\OtelBundle\CyberclickOtelBundle::class => ['all' => true],
+Cyberclick\OtelBundle\CyberclickOtelBundle::class => ['all' => true],
 ```
 
 ## Configuration
@@ -45,7 +45,7 @@ Traces outgoing HTTP calls made via Symfony HttpClient. You choose which clients
 
 ```yaml
 # Trace ALL outgoing HTTP calls
-CyberclickTech\OtelBundle\HttpClient\TracingHttpClient:
+Cyberclick\OtelBundle\HttpClient\TracingHttpClient:
     decorates: http_client
     arguments:
         $client: '@.inner'
@@ -54,7 +54,7 @@ CyberclickTech\OtelBundle\HttpClient\TracingHttpClient:
 
 ```yaml
 # Trace only a specific scoped client
-CyberclickTech\OtelBundle\HttpClient\TracingHttpClient:
+Cyberclick\OtelBundle\HttpClient\TracingHttpClient:
     decorates: http_client.catastro
     arguments:
         $client: '@.inner'
@@ -75,13 +75,13 @@ doctrine:
         connections:
             default:
                 middlewares:
-                    - 'CyberclickTech\OtelBundle\Doctrine\TracingMiddleware'
+                    - 'Cyberclick\OtelBundle\Doctrine\TracingMiddleware'
 ```
 
 If you use a custom `EntityManagerFactory`, inject the middleware and pass it to `setMiddlewares()`:
 
 ```php
-use CyberclickTech\OtelBundle\Doctrine\TracingMiddleware;
+use Cyberclick\OtelBundle\Doctrine\TracingMiddleware;
 use Doctrine\DBAL\Driver\Middleware;
 
 public static function create(array $parameters, ?Middleware $tracingMiddleware = null): EntityManager
@@ -98,7 +98,7 @@ public static function create(array $parameters, ?Middleware $tracingMiddleware 
 # services.yaml
 App\EntityManagerFactory:
     arguments:
-        $tracingMiddleware: '@CyberclickTech\OtelBundle\Doctrine\TracingMiddleware'
+        $tracingMiddleware: '@Cyberclick\OtelBundle\Doctrine\TracingMiddleware'
 ```
 
 ### Messenger middleware
@@ -119,7 +119,7 @@ framework:
 `MessageTracerInterface` provides manual span management for RabbitMQ consumers with automatic `forceFlush()` for long-running processes:
 
 ```php
-use CyberclickTech\OtelBundle\Tracing\MessageTracerInterface;
+use Cyberclick\OtelBundle\Tracing\MessageTracerInterface;
 
 final class MyConsumer
 {
@@ -148,7 +148,7 @@ final class MyConsumer
 To add application-specific attributes to HTTP and message spans (e.g., tenant ID, user ID), implement `SpanAttributeExtractorInterface`:
 
 ```php
-use CyberclickTech\OtelBundle\SpanAttributeExtractorInterface;
+use Cyberclick\OtelBundle\SpanAttributeExtractorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class MyAppSpanAttributeExtractor implements SpanAttributeExtractorInterface
@@ -182,7 +182,7 @@ Register it in your services config to override the default (no-op) extractor:
 ```yaml
 Actel\Shared\Infrastructure\OpenTelemetry\MyAppSpanAttributeExtractor: ~
 
-CyberclickTech\OtelBundle\SpanAttributeExtractorInterface:
+Cyberclick\OtelBundle\SpanAttributeExtractorInterface:
     alias: Actel\Shared\Infrastructure\OpenTelemetry\MyAppSpanAttributeExtractor
 ```
 
@@ -193,9 +193,9 @@ CyberclickTech\OtelBundle\SpanAttributeExtractorInterface:
 | `cyberclick_otel.tracer_provider` | `TracerProvider` instance |
 | `cyberclick_otel.tracer` | `TracerInterface` instance |
 | `cyberclick_otel.messenger.tracing_middleware` | Messenger middleware |
-| `CyberclickTech\OtelBundle\Tracing\MessageTracerInterface` | Message tracer for consumers |
-| `CyberclickTech\OtelBundle\Doctrine\TracingMiddleware` | Doctrine DBAL middleware |
-| `CyberclickTech\OtelBundle\HttpClient\TracingHttpClient` | HTTP client decorator (manual registration) |
+| `Cyberclick\OtelBundle\Tracing\MessageTracerInterface` | Message tracer for consumers |
+| `Cyberclick\OtelBundle\Doctrine\TracingMiddleware` | Doctrine DBAL middleware |
+| `Cyberclick\OtelBundle\HttpClient\TracingHttpClient` | HTTP client decorator (manual registration) |
 
 ## Requirements
 
