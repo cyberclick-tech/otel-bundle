@@ -200,5 +200,5 @@ Cyberclick\OtelBundle\SpanAttributeExtractorInterface:
 ## Requirements
 
 - PHP >= 8.2
-- Symfony 6.4 or 7.x
+- Symfony 7.x or 8.x
 - OpenTelemetry PHP SDK
